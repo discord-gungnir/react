@@ -1,13 +1,14 @@
 import { Node, AuthorNode, DescriptionNode, EmbedNode, FieldNode, FieldNameNode, FieldValueNode, FileNode, FooterNode, MessageNode, ImageNode, ReactionNode,
-  TextNode, ThumbnailNode, TimestampNode, TitleNode, RENDER, ROOT_CLONE, ParentNode, RootNode } from "./nodes";
+  TextNode, ThumbnailNode, TimestampNode, TitleNode, ParentNode, ROOT_CLONE } from "./nodes";
 import { RenderResult, TRIGGER_CHANGE } from "./render";
 import ReactReconciler from "react-reconciler";
 import { GungnirError } from "@gungnir/core";
+import type { RootNode } from "./nodes";
 
 export default ReactReconciler<
   string,
   Record<string, any>,
-  RootNode,
+  RenderResult,
   Node,
   TextNode,
   Node,
@@ -134,39 +135,39 @@ export default ReactReconciler<
   },
 
   // container
-  appendChildToContainer(root, child) {
-    if (!root.isValidChild(child))
+  appendChildToContainer(render, child) {
+    if (!render.root.isValidChild(child))
       throw new GungnirError(`'${child.type}' is not a valid root child`);
-    root.appendChild(child);
+    render.root.appendChild(child);
   },
-  insertInContainerBefore(root, child, before) {
-    if (!root.isValidChild(child) || !root.isValidChild(before))
+  insertInContainerBefore(render, child, before) {
+    if (!render.root.isValidChild(child) || !render.root.isValidChild(before))
       throw new GungnirError(`'${child.type}' is not a valid root child`);
-    root.prependChild(child, before);
+    render.root.prependChild(child, before);
   },
-  removeChildFromContainer(root, child) {
-    if (!root.isValidChild(child))
+  removeChildFromContainer(render, child) {
+    if (!render.root.isValidChild(child))
       throw new GungnirError(`'${child.type}' is not a valid root child`);
-    root.removeChild(child);
+    render.root.removeChild(child);
   },
-  clearContainer(root) {
-    root.removeAllChildren();
+  clearContainer(render) {
+    render.root.removeAllChildren();
   },
 
   // commit
-  prepareForCommit(root) {
-    root[ROOT_CLONE] = root.clone();
+  prepareForCommit(render) {
+    render.root[ROOT_CLONE] = render.root.clone();
     return null;
   },
-  resetAfterCommit(root) {
-    if (!root.equals(root[ROOT_CLONE] as RootNode))
-      root[RENDER][TRIGGER_CHANGE]();
-    root[ROOT_CLONE] = null;
+  resetAfterCommit(render) {
+    if (!render.root.equals(render.root[ROOT_CLONE] as RootNode))
+      render[TRIGGER_CHANGE]();
+    render.root[ROOT_CLONE] = null;
   },
   
   // context
-  getRootHostContext(root) {
-    RenderResult.current = root[RENDER];
+  getRootHostContext(render) {
+    RenderResult.current = render;
     return null;
   },
   getChildHostContext(context) {
@@ -177,7 +178,7 @@ export default ReactReconciler<
   },
   
   // misc
-  preparePortalMount(root) {},
+  preparePortalMount(render) {},
   hideInstance(instance) {},
   unhideInstance(instance) {},
   finalizeInitialChildren(instance) {

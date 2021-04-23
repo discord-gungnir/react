@@ -7,11 +7,11 @@ export const TRIGGER_CHANGE = Symbol("trigger change");
 
 const noop = () => {};
 export class RenderResult {
-  public root = new RootNode(this);
+  public root = new RootNode();
 
   public readonly client: GungnirClient = this.channel.client;
   public constructor(public readonly channel: DMChannel | TextChannel | NewsChannel, element: JSX.Element) {
-    const container = reconciler.createContainer(this.root, 0, false, null);
+    const container = reconciler.createContainer(this, 0, false, null);
     reconciler.updateContainer(element, container, null, noop);
   }
 

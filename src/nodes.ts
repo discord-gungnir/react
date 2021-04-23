@@ -316,14 +316,11 @@ export class ReactionNode extends BaseNode<"reaction"> implements Props<"reactio
   }
 }
 
-export const RENDER = Symbol("root render");
 export const ROOT_CLONE = Symbol("root clone");
 export class RootNode extends ParentNode<"root", EmbedNode | MessageNode | ReactionNode> {
-  private [RENDER]: RenderResult;
   private [ROOT_CLONE]: RootNode | null = null;
-  public constructor(render: RenderResult) {
+  public constructor() {
     super("root");
-    Object.defineProperty(this, RENDER, {value: render});
     Object.defineProperty(this, ROOT_CLONE, {enumerable: false});
   } 
 
@@ -349,7 +346,7 @@ export class RootNode extends ParentNode<"root", EmbedNode | MessageNode | React
     && node instanceof RootNode;
   }
   public clone() {
-    const clone = new RootNode(this[RENDER]);
+    const clone = new RootNode();
     clone.children = this.children.map(c => c.clone());
     return clone;
   }
