@@ -10,7 +10,7 @@ npm install @gungnir/react
 
 ## Usage
 
-```tsx
+```jsx
 import { Message, Embed, Field, FieldName, FieldValue, Reaction } from "@gungnir/react";
 import { useState, useCallback } from "react";
 import { Command } from "@gungnir/core";
@@ -44,14 +44,17 @@ export class CounterCommand extends Command {
 
 ## Components
 
-* [`<Message>`](#message)
-* [`<Embed>`](#embed)
-* [`<Reaction>`](#reaction)
+- [Gungnir React](#gungnir-react)
+  - [Install](#install)
+  - [Usage](#usage)
+  - [Components](#components)
+    - [`<Message>`](#message)
+    - [`<Embed>`](#embed)
 
 ### `<Message>`
 
 Simplest component, simply returns a Message.
-```tsx
+```jsx
 const message = await ctx.jsx(<Message>This is my message</Message>);
 console.log(message.content); // "This is my message"
 ```
@@ -59,7 +62,7 @@ console.log(message.content); // "This is my message"
 ### `<Embed>`
 
 This component is used to return an embed.
-```tsx
+```jsx
 <Embed color="669900">
   <Author>I am the author hello!</Author>
   <Field>

@@ -71,6 +71,7 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
 
   const emoji = props.emoji;
   const createEvent = useCallback((msg: DiscordMessage, event: (user: User) => void) => async (msgReaction: MessageReaction, user: User | PartialUser) => {
+    if (msgReaction.message.id != msg.id) return;
     if (user.partial) user = await msg.client.users.fetch(user.id);
     if (msgReaction.emoji.name != emoji) return;
     event(user);
@@ -85,21 +86,21 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
       msg.client.off("messageReactionAdd", event);
       msg.client.off("messageReactionRemove", event);
     };
-  }, [msg, props.onClick]);
+  });
 
   useEffect(() => {
     if (!msg || !props.onAdd) return;
     const event = createEvent(msg, props.onAdd);
     msg.client.on("messageReactionAdd", event);
     return () => void msg.client.off("messageReactionAdd", event);
-  }, [msg, props.onAdd]);
+  });
 
   useEffect(() => {
     if (!msg || !props.onRemove) return;
     const event = createEvent(msg, props.onRemove);
     msg.client.on("messageReactionRemove", event);
     return () => void msg.client.off("messageReactionRemove", event);
-  }, [msg, props.onRemove]);
+  });
 
   return <gungnir-reaction emoji={props.emoji}/>;
 }
