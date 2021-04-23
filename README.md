@@ -62,6 +62,7 @@ export class CounterCommand extends Command {
 - [Hooks](#hooks)
   - [`useTimeout`](#usetimeout)
   - [`useInterval`](#useinterval)
+  - [`useForceUpdate`](#useforceupdate)
   - [`useTemporaryEffect`](#usetemporaryeffect)
   - [`useUser`](#useuser)
   - [`useGuild`](#useguild)
@@ -116,7 +117,7 @@ Set the thumbnail of an embed. (top right image)
 Set the description field in an embed.
 ```jsx
 <Embed>
-  <Title url="url">I am the author</Title>
+  <Title url="url">Title field</Title>
 </Embed>
 ```
 
@@ -125,7 +126,7 @@ Set the description field in an embed.
 Set the description field in an embed.
 ```jsx
 <Embed>
-  <Description>Embed description</Description>
+  <Description>Description field</Description>
 </Embed>
 ```
 
@@ -143,7 +144,7 @@ Add a field to the embed.
 
 #### `<Image>`
 
-Set the image of an embed (bottom)
+Set the image of an embed. (bottom)
 ```jsx
 <Embed>
   <Image url="url"/>
@@ -181,7 +182,8 @@ Attach a file to the embed.
 
 ### `useTimeout`
 
-Creates a timeout that cancels itself when the component is unmounted. 3rd arg is a dependency list.
+Creates a timeout that cancels itself when the component is unmounted.\
+3rd arg is the dependency list.
 ```ts
 useTimeout(() => {
   console.log("1 second timeout");
@@ -195,6 +197,14 @@ Works the same way as [`useTimeout`](#usetimeout), but using an interval instead
 useInterval(() => {
   console.log("1 second interval");
 }, 1000, []);
+```
+
+### `useForceUpdate`
+
+Forces the component to rerender.
+```ts
+const forceUpdate = useForceUpdate();
+forceUpdate();
 ```
 
 ### `useTemporaryEffect`

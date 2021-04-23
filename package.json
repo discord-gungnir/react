@@ -1,6 +1,6 @@
 {
   "name": "@gungnir/react",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A custom React renderer to easily create responses using Gungnir.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
