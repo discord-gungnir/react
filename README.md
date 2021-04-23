@@ -227,13 +227,13 @@ function UserAvatar(props: {user: User}) {
 ```
 
 ### `useGuild`
-See [`useUser`](#useuser)
+See [`useUser`](#useuser).
 
 ### `useGuildMember`
-See [`useUser`](#useuser)
+See [`useUser`](#useuser).
 
 ### `useChannel`
-See [`useUser`](#useuser)
+See [`useUser`](#useuser).
 
 ### `useClient`
 Returns the client.
