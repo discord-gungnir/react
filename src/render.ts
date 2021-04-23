@@ -1,15 +1,16 @@
-import type { Message } from "discord.js";
+import type { Message, DMChannel, NewsChannel, TextChannel } from "discord.js";
+import type { GungnirClient } from "@gungnir/core";
 import reconciler from "./reconciler";
 import { RootNode } from "./nodes";
 
-export const CURRENT_RENDER = Symbol("current render");
 export const TRIGGER_CHANGE = Symbol("trigger change");
 
 const noop = () => {};
 export class RenderResult {
   public root = new RootNode(this);
 
-  public constructor(element: JSX.Element) {
+  public readonly client: GungnirClient = this.channel.client;
+  public constructor(public readonly channel: DMChannel | TextChannel | NewsChannel, element: JSX.Element) {
     const container = reconciler.createContainer(this.root, 0, false, null);
     reconciler.updateContainer(element, container, null, noop);
   }
@@ -43,9 +44,9 @@ export class RenderResult {
   }
 
   // current
-  private static [CURRENT_RENDER]: RenderResult | null = null;
+  public static current: RenderResult | null = null;
 }
 
-export function render(element: JSX.Element) {
-  return new RenderResult(element);
+export function render(element: JSX.Element, channel: DMChannel | TextChannel | NewsChannel) {
+  return new RenderResult(channel, element);
 }

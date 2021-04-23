@@ -1,6 +1,6 @@
 import { Node, AuthorNode, DescriptionNode, EmbedNode, FieldNode, FieldNameNode, FieldValueNode, FileNode, FooterNode, MessageNode, ImageNode, ReactionNode,
   TextNode, ThumbnailNode, TimestampNode, TitleNode, RENDER, ROOT_CLONE, ParentNode, RootNode } from "./nodes";
-import { RenderResult, TRIGGER_CHANGE, CURRENT_RENDER } from "./render";
+import { RenderResult, TRIGGER_CHANGE } from "./render";
 import ReactReconciler from "react-reconciler";
 
 export default ReactReconciler<
@@ -155,7 +155,7 @@ export default ReactReconciler<
   
   // context
   getRootHostContext(root) {
-    RenderResult[CURRENT_RENDER] = root[RENDER];
+    RenderResult.current = root[RENDER];
     return null;
   },
   getChildHostContext(context) {
