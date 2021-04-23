@@ -1,53 +1,10 @@
 import type { Guild, GuildMember, PartialGuildMember, User, PartialUser, Channel, Message, PartialMessage } from "discord.js";
-import { useCallback, useEffect, useState, useRef } from "react";
-import type { EffectCallback, DependencyList } from "react";
+import { useEphemeral, useForceUpdate } from "@dragoteryx/react-util";
+import { useEffect, useState, useRef } from "react";
 import { RenderResult } from "./render";
-
-// internal
 
 function useRenderResult() {
   return useRef(RenderResult.current as RenderResult).current;
-}
-
-// exported
-
-export function useTimeout(handler: TimerHandler, timeout?: number, deps?: DependencyList) {
-  return useEffect(() => {
-    const handle = setTimeout(handler, timeout);
-    return () => clearTimeout(handle);
-  }, deps);
-}
-
-export function useInterval(handler: TimerHandler, timeout?: number, deps?: DependencyList) {
-  return useEffect(() => {
-    const handle = setInterval(handler, timeout);
-    return () => clearInterval(handle);
-  }, deps);
-}
-
-export function useForceUpdate() {
-  const setValue = useState({})[1];
-  return useCallback(() => setValue({}), []);
-}
-
-export function useTemporaryEffect(duration: number, effect: EffectCallback, deps?: DependencyList) {
-  return useEffect(() => {
-    if (duration < 0) return effect();
-    else {
-      let destroyed = false;
-      const destroy = effect();
-      function disable() {
-        if (!destroy || destroyed) return;
-        destroyed = true;
-        destroy();
-      }
-      const timeout = setTimeout(disable, duration);
-      return () => {
-        clearTimeout(timeout);
-        disable();
-      }
-    }
-  }, deps);
 }
 
 /**
@@ -77,12 +34,13 @@ export function useGuild() {
  */
 export function useMessage() {
   const render = useRenderResult();
-  const [message, setMessage] = useState<Message | null>(render.message);
+  const [message, setMessage] = useState(render.message);
   useEffect(() => {
     if (message) return;
     let destroyed = false;
     render.awaitMessage().then(msg => {
-      if (!destroyed) setMessage(msg)});
+      if (!destroyed) setMessage(msg);
+    });
     return () => void (destroyed = true);
   }, []);
   return message;
@@ -95,7 +53,7 @@ export function useMessage() {
  */
  export function useTrackUser(user: User, duration = -1) {
   const forceUpdate = useForceUpdate();
-  useTemporaryEffect(duration, () => {
+  useEphemeral(duration, () => {
     const event = (old: User | PartialUser) => {
       if (old.id == user.id) forceUpdate()};
     user.client.on("userUpdate", event);
@@ -111,7 +69,7 @@ export function useMessage() {
  */
 export function useTrackGuild(guild: Guild, duration = -1) {
   const forceUpdate = useForceUpdate();
-  useTemporaryEffect(duration, () => {
+  useEphemeral(duration, () => {
     const event = (old: Guild) => {
       if (old.id == guild.id) forceUpdate()};
     guild.client.on("guildUpdate", event);
@@ -127,7 +85,7 @@ export function useTrackGuild(guild: Guild, duration = -1) {
  */
 export function useTrackGuildMember(member: GuildMember, duration = -1) {
   const forceUpdate = useForceUpdate();
-  useTemporaryEffect(duration, () => {
+  useEphemeral(duration, () => {
     const event = (old: GuildMember | PartialGuildMember) => {
       if (old.id == member.id) forceUpdate()};
     member.client.on("guildMemberUpdate", event);
@@ -143,7 +101,7 @@ export function useTrackGuildMember(member: GuildMember, duration = -1) {
  */
  export function useTrackChannel<T extends Channel>(channel: T, duration = -1) {
   const forceUpdate = useForceUpdate();
-  useTemporaryEffect(duration, () => {
+  useEphemeral(duration, () => {
     const event = (old: Channel) => {
       if (old.id == channel.id) forceUpdate()};
     channel.client.on("channelUpdate", event);
@@ -159,7 +117,7 @@ export function useTrackGuildMember(member: GuildMember, duration = -1) {
  */
 export function useTrackMessage(message: Message, duration = -1) {
   const forceUpdate = useForceUpdate();
-  useTemporaryEffect(duration, () => {
+  useEphemeral(duration, () => {
     const event = (old: Message | PartialMessage) => {
       if (old.id == message.id) forceUpdate()};
     message.client.on("messageUpdate", event);

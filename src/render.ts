@@ -8,7 +8,6 @@ export const TRIGGER_CHANGE = Symbol("trigger change");
 const noop = () => {};
 export class RenderResult {
   public root = new RootNode();
-
   public readonly client: GungnirClient = this.channel.client;
   public constructor(public readonly channel: DMChannel | TextChannel | NewsChannel, element: JSX.Element) {
     const container = reconciler.createContainer(this, 0, false, null);
@@ -25,24 +24,16 @@ export class RenderResult {
   }
 
   // message
-  #message: Message | null = null;
-  #waiting: ((msg: Message) => void)[] = [];
-  public get message() {
-    return this.#message;
-  }
-  public setMessage(message: Message) {
+  #message: Message | null  = null;
+  #resolve!: (message: Message) => void;
+  #messagePromise = new Promise<Message>(resolve => this.#resolve = resolve);
+  public awaitMessage() {return this.#messagePromise}
+  public get message() {return this.#message}
+  public provideMessage(message: Message) {
     this.#message = message;
-    for (const fn of this.#waiting)
-      fn(message);
-    this.#waiting.length = 0;
+    this.#resolve(message);
   }
-  public awaitMessage() {
-    return new Promise<Message>(resolve => {
-      if (this.message) resolve(this.message);
-      else this.#waiting.push(resolve);
-    });
-  }
-
+  
   // current
   public static current: RenderResult | null = null;
 }

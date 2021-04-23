@@ -1,5 +1,4 @@
 import type { ColorResolvable, EmojiIdentifierResolvable, FileOptions, MessageAttachment } from "discord.js";
-import type { RenderResult } from "./render";
 import { MessageEmbed } from "discord.js";
 import type { Props } from "./types";
 

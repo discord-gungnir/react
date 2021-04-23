@@ -3,10 +3,6 @@ export type GungnirElement =
     T extends `gungnir-${infer Y}` ? Y : never
   : never;
 
-export type List<T> = T | T[];
-export type String = List<string | number | boolean>;
-export type Elements = List<JSX.Element | null | boolean>;
-
 export type PropsWithChildren<T extends GungnirElement> =
   `gungnir-${T}` extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[`gungnir-${T}`] : never;
 

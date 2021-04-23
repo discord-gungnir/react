@@ -60,10 +60,6 @@ export class CounterCommand extends Command {
     - [`<Timestamp>`](#timestamp)
     - [`<File>`](#file)
 - [Hooks](#hooks)
-  - [`useTimeout`](#usetimeout)
-  - [`useInterval`](#useinterval)
-  - [`useForceUpdate`](#useforceupdate)
-  - [`useTemporaryEffect`](#usetemporaryeffect)
   - [`useClient`](#useclient)
   - [`useChannel`](#usechannel)
   - [`useGuild`](#useguild)
@@ -180,44 +176,6 @@ Attach a file to the embed.
 ```
 
 ## Hooks
-
-### `useTimeout`
-
-Creates a timeout that cancels itself when the component is unmounted.\
-3rd arg is the dependency list.
-```ts
-useTimeout(() => {
-  console.log("1 second timeout");
-}, 1000, []);
-```
-
-### `useInterval`
-
-Works the same way as [`useTimeout`](#usetimeout), but using an interval instead.
-```ts
-useInterval(() => {
-  console.log("1 second interval");
-}, 1000, []);
-```
-
-### `useForceUpdate`
-
-Forces the component to rerender.
-```ts
-const forceUpdate = useForceUpdate();
-forceUpdate();
-```
-
-### `useTemporaryEffect`
-
-Creates an effect that is disabled after the specified duration.\
-Using a negative duration never disables the effect.
-```ts
-useTemporaryEffect(10000, () => {
-  // this effect will be disabled after 10 seconds
-  return () => {};
-}, []);
-```
 
 ### `useClient`
 Returns the client.
