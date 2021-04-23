@@ -64,14 +64,15 @@ export class CounterCommand extends Command {
   - [`useInterval`](#useinterval)
   - [`useForceUpdate`](#useforceupdate)
   - [`useTemporaryEffect`](#usetemporaryeffect)
-  - [`useUser`](#useuser)
-  - [`useGuild`](#useguild)
-  - [`useGuildMember`](#useguildmember)
-  - [`useChannel`](#usechannel)
   - [`useClient`](#useclient)
-  - [`useThisChannel`](#usethischannel)
-  - [`useThisGuild`](#usethisguild)
-  - [`useThisMessage`](#usethismessage)
+  - [`useChannel`](#usechannel)
+  - [`useGuild`](#useguild)
+  - [`useMessage`](#usemessage)
+  - [`useTrackUser`](#usetrackuser)
+  - [`useTrackGuild`](#usetrackguild)
+  - [`useTrackGuildMember`](#usetrackguildmember)
+  - [`useTrackChannel`](#usetrackchannel)
+  - [`useTrackMessage`](#usetrackmessage)
 
 ## Components
 
@@ -218,33 +219,6 @@ useTemporaryEffect(10000, () => {
 }, []);
 ```
 
-### `useUser`
-
-Rerenders the component when the user passed as a parameter is updated.\
-Disables itself after the specified duration.
-```jsx
-function UserAvatar(props: {user: User}) {
-  useUser(props.user, 300000); // will disable itself after 5 minutes
-  
-  const avatarURL = props.user.displayAvatarURL({
-    format: "png",
-    size: 4096,
-    dynamic: true
-  });
-
-  return <Image url={avatarURL}/>;
-}
-```
-
-### `useGuild`
-See [`useUser`](#useuser).
-
-### `useGuildMember`
-See [`useUser`](#useuser).
-
-### `useChannel`
-See [`useUser`](#useuser).
-
 ### `useClient`
 Returns the client.
 ```jsx
@@ -264,17 +238,17 @@ function CustomEmbed(props: {children: Elements}) {
   )
 }
 ```
-### `useThisChannel`
+### `useChannel`
 Returns the channel where the message is posted.
 
-### `useThisGuild`
+### `useGuild`
 Returns the guild where the channel is posted.
 
-### `useThisMessage`
+### `useMessage`
 Rerenders the component once the message has been posted.
 ```jsx
 function Ping() {
-  const msg = useThisMessage() // Message | null;
+  const msg = useMessage() // Message | null;
   const now = useRef(Date.now()).current;
   
   if (msg) {
@@ -283,3 +257,34 @@ function Ping() {
     return <Message>Pong!</Message>;
   }
 }
+```
+
+### `useTrackUser`
+
+Rerenders the component when the user passed as a parameter is updated.\
+Disables itself after the specified duration.
+```jsx
+function UserAvatar(props: {user: User}) {
+  useTrackUser(props.user, 300000); // will disable itself after 5 minutes
+  
+  const avatarURL = props.user.displayAvatarURL({
+    format: "png",
+    size: 4096,
+    dynamic: true
+  });
+
+  return <Image url={avatarURL}/>;
+}
+```
+
+### `useTrackGuild`
+See [`useTrackUser`](#useuser).
+
+### `useTrackGuildMember`
+See [`useTrackUser`](#useuser).
+
+### `useTrackChannel`
+See [`useTrackUser`](#useuser).
+
+### `useTrackMessage`
+See [`useTrackUser`](#useuser).
