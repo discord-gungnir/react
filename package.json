@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "description": "A custom React renderer to easily create responses using Gungnir.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@types/react": "^17.0.3",
     "discord.js": "^12.5.3",
     "react": "^17.0.2",
     "react-reconciler": "^0.26.2"
-  },
-  "devDependencies": {
-    "@types/react-reconciler": "^0.26.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/discord-gungnir/react/issues"
   },
-  "homepage": "https://github.com/discord-gungnir/react#readme"
+  "homepage": "https://github.com/discord-gungnir/react#readme",
+  "devDependencies": {
+    "@types/react-reconciler": "^0.26.1"
+  }
 }
