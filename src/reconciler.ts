@@ -2,6 +2,7 @@ import { Node, AuthorNode, DescriptionNode, EmbedNode, FieldNode, FieldNameNode,
   TextNode, ThumbnailNode, TimestampNode, TitleNode, RENDER, ROOT_CLONE, ParentNode, RootNode } from "./nodes";
 import { RenderResult, TRIGGER_CHANGE } from "./render";
 import ReactReconciler from "react-reconciler";
+import { GungnirError } from "@gungnir/core";
 
 export default ReactReconciler<
   string,
@@ -65,7 +66,7 @@ export default ReactReconciler<
       case "gungnir-title":
         return new TitleNode(props.url);
       default:
-        throw new TypeError(`'${type}' is not a valid element type`);
+        throw new GungnirError(`'${type}' is not a valid element type`);
     }
   },
   createTextInstance(text) {
@@ -104,38 +105,48 @@ export default ReactReconciler<
 
   // children
   appendInitialChild(parent, child) {
-    if (!(parent instanceof ParentNode)) return;
-    if (!parent.isValidChild(child)) return;
+    if (!(parent instanceof ParentNode))
+      throw new GungnirError(`elements of type '${parent.type}' can't have children`);
+    if (!parent.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid ${parent.type} child`);
     parent.appendChild(child as any);
   },
   appendChild(parent, child) {
-    if (!(parent instanceof ParentNode)) return;
-    if (!parent.isValidChild(child)) return;
+    if (!(parent instanceof ParentNode))
+      throw new GungnirError(`elements of type '${parent.type}' can't have children`);
+    if (!parent.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid ${parent.type} child`);
     parent.appendChild(child as any);
   },
   insertBefore(parent, child, before) {
-    if (!(parent instanceof ParentNode)) return;
-    if (!parent.isValidChild(child)) return;
+    if (!(parent instanceof ParentNode))
+      throw new GungnirError(`elements of type '${parent.type}' can't have children`);
+    if (!parent.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid ${parent.type} child`);
     parent.prependChild(child as any, before as any);
   },
   removeChild(parent, child) {
-    if (!(parent instanceof ParentNode)) return;
-    if (!parent.isValidChild(child)) return;
+    if (!(parent instanceof ParentNode))
+      throw new GungnirError(`elements of type '${parent.type}' can't have children`);
+    if (!parent.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid ${parent.type} child`);
     parent.removeChild(child as any);
   },
 
   // container
   appendChildToContainer(root, child) {
-    if (!root.isValidChild(child)) return;
+    if (!root.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid root child`);
     root.appendChild(child);
   },
   insertInContainerBefore(root, child, before) {
-    if (!root.isValidChild(child)) return;
-    if (!root.isValidChild(before)) return;
+    if (!root.isValidChild(child) || !root.isValidChild(before))
+      throw new GungnirError(`'${child.type}' is not a valid root child`);
     root.prependChild(child, before);
   },
   removeChildFromContainer(root, child) {
-    if (!root.isValidChild(child)) return;
+    if (!root.isValidChild(child))
+      throw new GungnirError(`'${child.type}' is not a valid root child`);
     root.removeChild(child);
   },
   clearContainer(root) {

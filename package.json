@@ -1,6 +1,6 @@
 {
   "name": "@gungnir/react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A custom React renderer to easily create responses using Gungnir.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,10 +25,5 @@
   "homepage": "https://github.com/discord-gungnir/react#readme",
   "devDependencies": {
     "@types/react-reconciler": "^0.26.1"
-  },
-  "exports": {
-    "./components": "./dist/components",
-    "./hooks": "./dist/hooks",
-    "./nodes": "./dist/nodes"
   }
 }
