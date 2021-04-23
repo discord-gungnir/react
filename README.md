@@ -1,6 +1,6 @@
 # Gungnir React (WIP) <!-- omit in toc -->
 
-A custom React renderer to easily create responses using Gungnir.
+A custom React renderer to easily create interactive responses using Gungnir.
 
 ## Install
 

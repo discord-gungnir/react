@@ -1,7 +1,7 @@
 import type { ColorResolvable, FileOptions, MessageAttachment, User, EmojiIdentifierResolvable, MessageReaction, PartialUser, Message as DiscordMessage } from "discord.js";
 import type { Elements, String, PropsWithChildren } from "./types";
 import { Fragment, useCallback, useEffect } from "react";
-import { useThisMessage } from "./hooks";
+import { useMessage } from "./hooks";
 
 // intrinsic
 
@@ -67,7 +67,7 @@ export function Message(props: PropsWithChildren<"message">) {
 }
 
 export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: User): void, onAdd?(user: User): void, onRemove?(user: User): void}) {
-  const msg = useThisMessage();
+  const msg = useMessage();
 
   const emoji = props.emoji;
   const createEvent = useCallback((msg: DiscordMessage, event: (user: User) => void) => async (msgReaction: MessageReaction, user: User | PartialUser) => {
