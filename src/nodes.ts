@@ -330,14 +330,11 @@ export class RootNode extends ParentNode<"root", EmbedNode | MessageNode | React
     || node.type == "reaction";
   }
   public get embeds() {
-    return this.children.filter(c => c.type == "embed") as EmbedNode[];
-  }
+    return this.children.filter(c => c.type == "embed") as EmbedNode[]}
   public get messages() {
-    return this.children.filter(c => c.type == "message") as MessageNode[];
-  }
+    return this.children.filter(c => c.type == "message") as MessageNode[]}
   public get reactions() {
-    return this.children.filter(c => c.type == "reaction") as ReactionNode[];
-  }
+    return this.children.filter(c => c.type == "reaction") as ReactionNode[]}
 
   // util
   public equals(node: Node) {

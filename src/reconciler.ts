@@ -98,7 +98,7 @@ export default ReactReconciler<
     return hasDiff ? diff : null;
   },
   commitUpdate(instance, update) {
-    Object.assign(instance, update)
+    Object.assign(instance, update);
   },
   commitTextUpdate(instance, oldText, newText) {
     instance.text = newText;
