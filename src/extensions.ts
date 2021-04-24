@@ -17,7 +17,7 @@ Object.defineProperty(Command.Context.prototype, "jsx", {
     const content = renderResult.contents.join("\n");
     const embed = renderResult.embeds[0];
     const reactions = renderResult.reactions;
-    const msg = await this.channel.send(content, {embed});
+    const msg = await this.send(content, embed);
     renderResult.onChange(() => {
       msg.edit(renderResult.contents.join("\n"), {embed: renderResult.embeds[0] ?? null});
     });
