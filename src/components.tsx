@@ -72,6 +72,7 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
 
   const emoji = props.emoji;
   const createEvent = useCallback((msg: DiscordMessage, event: (user: User) => void) => async (msgReaction: MessageReaction, user: User | PartialUser) => {
+    if (user.id == msg.client.user?.id) return;
     if (msgReaction.message.id != msg.id) return;
     if (user.partial) user = await msg.client.users.fetch(user.id);
     if (msgReaction.emoji.name != emoji) return;
