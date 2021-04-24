@@ -8,7 +8,7 @@ export const TRIGGER_CHANGE = Symbol("trigger change");
 const noop = () => {};
 export class RenderResult {
   public root = new RootNode();
-  public readonly client: GungnirClient = this.channel.client;
+  public readonly client = this.channel.client as GungnirClient;
   public constructor(public readonly channel: DMChannel | TextChannel | NewsChannel, element: JSX.Element) {
     const container = reconciler.createContainer(this, 0, false, null);
     reconciler.updateContainer(element, container, null, noop);
@@ -48,14 +48,4 @@ export class RenderResult {
 
 export function render(element: JSX.Element, channel: DMChannel | TextChannel | NewsChannel) {
   return new RenderResult(channel, element);
-  /*if (send) (async () => {
-    const msg = await channel.send(render.contents.join("\n"), {embed: render.embeds[0]});
-    render.onChange(() => {
-      msg.edit(render.contents.join("\n"), {embed: render.embeds[0] ?? null});
-    });
-    render.reactions.forEach(async r => {
-      try {await msg.react(r)} catch {}
-    });
-    render.provideMessage(msg);
-  })();*/
 }
