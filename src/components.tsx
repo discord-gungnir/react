@@ -75,7 +75,7 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
     if (user.id == msg.client.user?.id) return;
     if (msgReaction.message.id != msg.id) return;
     if (user.partial) user = await msg.client.users.fetch(user.id);
-    if (msgReaction.emoji.name != emoji) return;
+    if (msgReaction.emoji.toString() != emoji) return;
     event(user);
   }, [emoji]);
 

@@ -39,6 +39,7 @@ Object.defineProperty(Command.Context.prototype, "jsx", {
     reactions.forEach(async r => {
       try {await msg.react(r)} catch {}
     });
+
     return msg;
   }
 });

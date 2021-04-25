@@ -51,9 +51,10 @@ export function useMessage() {
  * @param user The user to track
  * @param duration For how long to track updates
  */
- export function useTrackUser(user: User, duration = -1) {
+ export function useTrackUser(user: User | null, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
+    if (!user) return;
     const eventUser = (old: User | PartialUser) => {
       if (old.id == user.id) forceUpdate()};
     const eventPresence = (_: Presence | undefined, presence: Presence) => {
@@ -64,8 +65,7 @@ export function useMessage() {
       user.client.off("userUpdate", eventUser);
       user.client.off("presenceUpdate", eventPresence);
     }
-  }, [user.id]);
-  return user;
+  }, [user?.id]);
 }
 
 /**
@@ -73,15 +73,15 @@ export function useMessage() {
  * @param guild The guild to track
  * @param duration For how long to track updates
  */
-export function useTrackGuild(guild: Guild, duration = -1) {
+export function useTrackGuild(guild: Guild | null, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
+    if (!guild) return;
     const event = (old: Guild) => {
       if (old.id == guild.id) forceUpdate()};
     guild.client.on("guildUpdate", event);
     return () => void guild.client.off("guildUpdate", event);
-  }, [guild.id]);
-  return guild;
+  }, [guild?.id]);
 }
 
 /**
@@ -89,9 +89,10 @@ export function useTrackGuild(guild: Guild, duration = -1) {
  * @param member The guild member to track
  * @param duration For how long to track updates
  */
-export function useTrackGuildMember(member: GuildMember, duration = -1) {
+export function useTrackGuildMember(member: GuildMember | null, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
+    if (!member) return;
     const eventMember = (old: GuildMember | PartialGuildMember) => {
       if (old.id == member.id) forceUpdate()};
     const eventPresence = (_: Presence | undefined, presence: Presence) => {
@@ -102,8 +103,7 @@ export function useTrackGuildMember(member: GuildMember, duration = -1) {
       member.client.off("guildMemberUpdate", eventMember);
       member.client.off("presenceUpdate", eventPresence);
     }
-  }, [member.id]);
-  return member;
+  }, [member?.id]);
 }
 
 /**
@@ -111,15 +111,15 @@ export function useTrackGuildMember(member: GuildMember, duration = -1) {
  * @param channel The channel to track
  * @param duration For how long to track updates
  */
- export function useTrackChannel<T extends Channel>(channel: T, duration = -1) {
+ export function useTrackChannel<T extends Channel>(channel: T | null, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
+    if (!channel) return;
     const event = (old: Channel) => {
       if (old.id == channel.id) forceUpdate()};
     channel.client.on("channelUpdate", event);
     return () => void channel.client.off("channelUpdate", event);
-  }, [channel.id]);
-  return channel;
+  }, [channel?.id]);
 }
 
 /**
@@ -127,13 +127,13 @@ export function useTrackGuildMember(member: GuildMember, duration = -1) {
  * @param message The message to track
  * @param duration For how long to track updates
  */
-export function useTrackMessage(message: Message, duration = -1) {
+export function useTrackMessage(message: Message | null, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
+    if (!message) return;
     const event = (old: Message | PartialMessage) => {
       if (old.id == message.id) forceUpdate()};
     message.client.on("messageUpdate", event);
     return () => void message.client.off("messageUpdate", event);
-  }, [message.id]);
-  return message;
+  }, [message?.id]);
 }
