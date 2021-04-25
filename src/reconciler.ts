@@ -167,6 +167,7 @@ export default ReactReconciler<
   
   // context
   getRootHostContext(render) {
+    // @ts-expect-error
     RenderResult.current = render;
     return null;
   },

@@ -43,7 +43,7 @@ export class RenderResult {
   }
   
   // current
-  public static current: RenderResult | null = null;
+  public static readonly current: RenderResult | null = null;
 }
 
 export function render(element: JSX.Element, channel: DMChannel | TextChannel | NewsChannel) {
