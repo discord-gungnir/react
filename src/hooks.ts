@@ -1,4 +1,4 @@
-import type { Guild, GuildMember, PartialGuildMember, User, PartialUser, Channel, Message, PartialMessage } from "discord.js";
+import type { Guild, GuildMember, PartialGuildMember, User, PartialUser, Channel, Message, PartialMessage, Presence } from "discord.js";
 import { useEphemeral, useForceUpdate } from "@dragoteryx/react-util";
 import { useEffect, useState, useRef } from "react";
 import { RenderResult } from "./render";
@@ -54,10 +54,16 @@ export function useMessage() {
  export function useTrackUser(user: User, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
-    const event = (old: User | PartialUser) => {
+    const eventUser = (old: User | PartialUser) => {
       if (old.id == user.id) forceUpdate()};
-    user.client.on("userUpdate", event);
-    return () => void user.client.off("userUpdate", event);
+    const eventPresence = (_: Presence | undefined, presence: Presence) => {
+      if (presence.userID == user.id) forceUpdate()};
+    user.client.on("userUpdate", eventUser);
+    user.client.on("presenceUpdate", eventPresence);
+    return () => {
+      user.client.off("userUpdate", eventUser);
+      user.client.off("presenceUpdate", eventPresence);
+    }
   }, [user.id]);
   return user;
 }
@@ -86,10 +92,16 @@ export function useTrackGuild(guild: Guild, duration = -1) {
 export function useTrackGuildMember(member: GuildMember, duration = -1) {
   const forceUpdate = useForceUpdate();
   useEphemeral(duration, () => {
-    const event = (old: GuildMember | PartialGuildMember) => {
+    const eventMember = (old: GuildMember | PartialGuildMember) => {
       if (old.id == member.id) forceUpdate()};
-    member.client.on("guildMemberUpdate", event);
-    return () => void member.client.off("guildMemberUpdate", event);
+    const eventPresence = (_: Presence | undefined, presence: Presence) => {
+      if (presence.userID == member.id) forceUpdate()};
+    member.client.on("guildMemberUpdate", eventMember);
+    member.client.on("presenceUpdate", eventPresence);
+    return () => {
+      member.client.off("guildMemberUpdate", eventMember);
+      member.client.off("presenceUpdate", eventPresence);
+    }
   }, [member.id]);
   return member;
 }
