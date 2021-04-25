@@ -29,9 +29,11 @@ Object.defineProperty(Command.Context.prototype, "jsx", {
     const embed = renderResult.embeds[0];
     const reactions = renderResult.reactions;
 
-    msg = await this.send(content, embed);
-    if (edit) await msg.edit((edit as Edit).content, {
-      embed: (edit as Edit).embed ?? null});
+    msg = await this.send({content, embed});
+    if (edit) await msg.edit({
+      content: (edit as Edit).content ?? "",
+      embed: (edit as Edit).embed ?? null}
+    );
 
     renderResult.provideMessage(msg);
     reactions.forEach(async r => {
