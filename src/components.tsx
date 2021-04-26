@@ -1,7 +1,7 @@
 import type { ColorResolvable, FileOptions, MessageAttachment, User, EmojiIdentifierResolvable, MessageReaction, PartialUser, Message as DiscordMessage } from "discord.js";
 import type { Elements, String } from "@dragoteryx/react-util";
 import type { PropsWithChildren } from "./types";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useMessage } from "./hooks";
 
 // intrinsic
@@ -71,13 +71,15 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
   const msg = useMessage();
 
   const emoji = props.emoji;
-  const createEvent = useCallback((msg: DiscordMessage, event: (user: User) => void) => async (msgReaction: MessageReaction, user: User | PartialUser) => {
-    if (user.id == msg.client.user?.id) return;
-    if (msgReaction.message.id != msg.id) return;
-    if (user.partial) user = await msg.client.users.fetch(user.id);
-    if (msgReaction.emoji.toString() != emoji) return;
-    event(user);
-  }, [emoji]);
+  function createEvent(msg: DiscordMessage, event: (user: User) => void) {
+    return async (msgReaction: MessageReaction, user: User | PartialUser) => {
+      if (user.id == msg.client.user?.id) return;
+      if (msgReaction.message.id != msg.id) return;
+      if (user.partial) user = await msg.client.users.fetch(user.id);
+      if (msgReaction.emoji.toString() != emoji) return;
+      event(user);
+    };
+  }
 
   useEffect(() => {
     if (!msg || !props.onClick) return;
@@ -88,21 +90,21 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
       msg.client.off("messageReactionAdd", event);
       msg.client.off("messageReactionRemove", event);
     };
-  });
+  }, [emoji, props.onClick]);
 
   useEffect(() => {
     if (!msg || !props.onAdd) return;
     const event = createEvent(msg, props.onAdd);
     msg.client.on("messageReactionAdd", event);
     return () => void msg.client.off("messageReactionAdd", event);
-  });
+  }, [emoji, props.onAdd]);
 
   useEffect(() => {
     if (!msg || !props.onRemove) return;
     const event = createEvent(msg, props.onRemove);
     msg.client.on("messageReactionRemove", event);
     return () => void msg.client.off("messageReactionRemove", event);
-  });
+  }, [emoji, props.onRemove]);
 
   return <gungnir-reaction emoji={props.emoji}/>;
 }

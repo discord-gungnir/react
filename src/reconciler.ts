@@ -79,23 +79,14 @@ export default ReactReconciler<
 
   // update
   prepareUpdate(instance, type, oldProps, newProps) {
+    const keys = {...oldProps, ...newProps};
     const diff: Record<string, any> = {};
     let hasDiff = false;
-    for (const key in oldProps) {
+    for (const key in keys) {
       if (key == "children") continue;
-      if (!Object.is(oldProps[key], newProps[key])) {
-        diff[key] = newProps[key];
-        hasDiff = true;
-      }
-    }
-    for (const key in newProps) {
-      if (key == "children" || key in diff) continue;
-      if (!Object.is(oldProps[key], newProps[key])) {
-        diff[key] = newProps[key];
-        hasDiff = true;
-      }
-    }
-    return hasDiff ? diff : null;
+      if (Object.is(oldProps[key], newProps[key])) continue;
+      diff[key] = newProps[key]; hasDiff = true;
+    } return hasDiff ? diff : null;
   },
   commitUpdate(instance, update) {
     Object.assign(instance, update);

@@ -34,10 +34,11 @@ export class RenderResult {
   // message
   #message: Message | null  = null;
   #resolve!: (message: Message) => void;
-  #messagePromise = new Promise<Message>(resolve => this.#resolve = resolve);
-  public awaitMessage() {return this.#messagePromise}
+  #promise = new Promise<Message>(resolve => this.#resolve = resolve);
+  public awaitMessage() {return this.#promise}
   public get message() {return this.#message}
   public provideMessage(message: Message) {
+    if (this.#message) return;
     this.#message = message;
     this.#resolve(message);
   }

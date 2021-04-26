@@ -218,11 +218,11 @@ export class FieldNode extends ParentNode<"field", FieldNameNode | FieldValueNod
 export class FieldNameNode extends TextBasedNode<"field-name"> implements Props<"field-name"> {
   public constructor() {super("field-name")}
 
+  // util
   public equals(node: Node) {
     return node instanceof FieldNameNode
     && this.text == node.text;
   }
-
   public clone() {
     const clone = new FieldNameNode();
     clone.children = this.children.map(c => c.clone());
@@ -233,11 +233,11 @@ export class FieldNameNode extends TextBasedNode<"field-name"> implements Props<
 export class FieldValueNode extends TextBasedNode<"field-value"> implements Props<"field-value"> {
   public constructor() {super("field-value")}
 
+  // util
   public equals(node: Node) {
     return node instanceof FieldValueNode
     && this.text == node.text;
   }
-
   public clone() {
     const clone = new FieldValueNode();
     clone.children = this.children.map(c => c.clone());
@@ -248,11 +248,11 @@ export class FieldValueNode extends TextBasedNode<"field-value"> implements Prop
 export class FileNode extends BaseNode<"file"> implements Props<"file"> {
   public constructor(public file: string | FileOptions | MessageAttachment) {super("file")}
 
+  // util
   public equals(node: Node) {
     return node instanceof FileNode
     && this.file == node.file;
   }
-
   public clone() {
     return new FileNode(this.file);
   }
@@ -261,12 +261,12 @@ export class FileNode extends BaseNode<"file"> implements Props<"file"> {
 export class FooterNode extends TextBasedNode<"footer"> implements Props<"footer"> {
   public constructor(public iconURL?: string) {super("footer")}
 
+  // util
   public equals(node: Node) {
     return node instanceof FooterNode
     && this.text == node.text
     && this.iconURL === node.iconURL;
   }
-
   public clone() {
     const clone = new FooterNode(this.iconURL);
     clone.children = this.children.map(c => c.clone());
@@ -277,11 +277,11 @@ export class FooterNode extends TextBasedNode<"footer"> implements Props<"footer
 export class MessageNode extends TextBasedNode<"message"> implements Props<"message"> {
   public constructor() {super("message")}
 
+  // util
   public equals(node: Node) {
     return node instanceof MessageNode
     && this.text == node.text;
   }
-
   public clone() {
     const clone = new MessageNode();
     clone.children = this.children.map(c => c.clone());
@@ -323,6 +323,17 @@ export class RootNode extends ParentNode<"root", EmbedNode | MessageNode | React
     Object.defineProperty(this, ROOT_CLONE, {enumerable: false});
   } 
 
+  // util
+  public equals(node: Node) {
+    return super.equals(node)
+    && node instanceof RootNode;
+  }
+  public clone() {
+    const clone = new RootNode();
+    clone.children = this.children.map(c => c.clone());
+    return clone;
+  }
+
   // children
   public isValidChild(node: Node): node is EmbedNode | MessageNode | ReactionNode {
     return node.type == "embed"
@@ -335,27 +346,16 @@ export class RootNode extends ParentNode<"root", EmbedNode | MessageNode | React
     return this.children.filter(c => c.type == "message") as MessageNode[]}
   public get reactions() {
     return this.children.filter(c => c.type == "reaction") as ReactionNode[]}
-
-  // util
-  public equals(node: Node) {
-    return super.equals(node)
-    && node instanceof RootNode;
-  }
-  public clone() {
-    const clone = new RootNode();
-    clone.children = this.children.map(c => c.clone());
-    return clone;
-  }
 }
 
 export class TextNode extends BaseNode<"text"> {
   public constructor(public text: string) {super("text")}
 
+  // util
   public equals(node: Node) {
     return node instanceof TextNode
     && this.text == node.text;
   }
-
   public clone() {
     return new TextNode(this.text);
   }
@@ -364,11 +364,11 @@ export class TextNode extends BaseNode<"text"> {
 export class ThumbnailNode extends BaseNode<"thumbnail"> implements Props<"thumbnail"> {
   public constructor(public url: string) {super("thumbnail")}
 
+  // util
   public equals(node: Node) {
     return node instanceof ThumbnailNode
     && this.url == node.url;
   }
-
   public clone() {
     return new ThumbnailNode(this.url);
   }
@@ -377,13 +377,13 @@ export class ThumbnailNode extends BaseNode<"thumbnail"> implements Props<"thumb
 export class TimestampNode extends BaseNode<"timestamp"> implements Props<"timestamp"> {
   public constructor(public time: number | Date = Date.now()) {super("timestamp")}
 
+  // util
   public equals(node: Node) {
     if (!(node instanceof TimestampNode)) return false;
     const timestamp1 = typeof this.time == "number" ? this.time : this.time.getTime();
     const timestamp2 = typeof node.time == "number" ? node.time : node.time.getTime();
     return timestamp1 == timestamp2;
   }
-
   public clone() {
     return new TimestampNode(this.time);
   }
@@ -392,12 +392,12 @@ export class TimestampNode extends BaseNode<"timestamp"> implements Props<"times
 export class TitleNode extends TextBasedNode<"title"> implements Props<"title"> {
   public constructor(public url?: string) {super("title")}
 
+  // util
   public equals(node: Node) {
     return node instanceof TitleNode
     && this.text == node.text
     && this.url === node.url;
   }
-
   public clone() {
     const clone = new TitleNode(this.url);
     clone.children = this.children.map(c => c.clone());

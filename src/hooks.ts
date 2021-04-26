@@ -39,8 +39,7 @@ export function useMessage() {
     if (message) return;
     let destroyed = false;
     render.awaitMessage().then(msg => {
-      if (!destroyed) setMessage(msg);
-    });
+      if (!destroyed) setMessage(msg)});
     return () => void (destroyed = true);
   }, []);
   return message;
@@ -64,7 +63,7 @@ export function useMessage() {
     return () => {
       user.client.off("userUpdate", eventUser);
       user.client.off("presenceUpdate", eventPresence);
-    }
+    };
   }, [user?.id]);
 }
 
