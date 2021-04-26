@@ -28,43 +28,43 @@ declare global {
 }
 
 export function Author(props: PropsWithChildren<"author">) {
-  return <gungnir-author {...props}/>;
+  return <gungnir-author iconURL={props.iconURL} url={props.url}>{props.children}</gungnir-author>;
 }
 
 export function Description(props: PropsWithChildren<"description">) {
-  return <gungnir-description {...props}/>;
+  return <gungnir-description>{props.children}</gungnir-description>;
 }
 
 export function Embed(props: PropsWithChildren<"embed">) {
-  return <gungnir-embed {...props}/>;
+  return <gungnir-embed color={props.color}>{props.children}</gungnir-embed>;
 }
 
 export function Field(props: PropsWithChildren<"field">) {
-  return <gungnir-field {...props}/>;
+  return <gungnir-field inline={props.inline}>{props.children}</gungnir-field>;
 }
 
 export function FieldName(props: PropsWithChildren<"field-name">) {
-  return <gungnir-field-name {...props}/>;
+  return <gungnir-field-name>{props.children}</gungnir-field-name>;
 }
 
 export function FieldValue(props: PropsWithChildren<"field-value">) {
-  return <gungnir-field-value {...props}/>;
+  return <gungnir-field-value>{props.children}</gungnir-field-value>;
 }
 
 export function File(props: PropsWithChildren<"file">) {
-  return <gungnir-file {...props}/>;
+  return <gungnir-file file={props.file}/>;
 }
 
 export function Footer(props: PropsWithChildren<"footer">) {
-  return <gungnir-footer {...props}/>;
+  return <gungnir-footer iconURL={props.iconURL}>{props.children}</gungnir-footer>;
 }
 
 export function Image(props: PropsWithChildren<"image">) {
-  return <gungnir-image {...props}/>;
+  return <gungnir-image url={props.url}/>;
 }
 
 export function Message(props: PropsWithChildren<"message">) {
-  return <gungnir-message {...props}/>;
+  return <gungnir-message>{props.children}</gungnir-message>;
 }
 
 export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: User): void, onAdd?(user: User): void, onRemove?(user: User): void}) {
@@ -90,35 +90,35 @@ export function Reaction(props: PropsWithChildren<"reaction"> & {onClick?(user: 
       msg.client.off("messageReactionAdd", event);
       msg.client.off("messageReactionRemove", event);
     };
-  }, [emoji, props.onClick]);
+  }, [msg?.id, emoji, props.onClick]);
 
   useEffect(() => {
     if (!msg || !props.onAdd) return;
     const event = createEvent(msg, props.onAdd);
     msg.client.on("messageReactionAdd", event);
     return () => void msg.client.off("messageReactionAdd", event);
-  }, [emoji, props.onAdd]);
+  }, [msg?.id, emoji, props.onAdd]);
 
   useEffect(() => {
     if (!msg || !props.onRemove) return;
     const event = createEvent(msg, props.onRemove);
     msg.client.on("messageReactionRemove", event);
     return () => void msg.client.off("messageReactionRemove", event);
-  }, [emoji, props.onRemove]);
+  }, [msg?.id, emoji, props.onRemove]);
 
   return <gungnir-reaction emoji={props.emoji}/>;
 }
 
 export function Thumbnail(props: PropsWithChildren<"thumbnail">) {
-  return <gungnir-thumbnail {...props}/>;
+  return <gungnir-thumbnail url={props.url}/>;
 }
 
 export function Timestamp(props: PropsWithChildren<"timestamp">) {
-  return <gungnir-timestamp {...props}/>;
+  return <gungnir-timestamp time={props.time}/>;
 }
 
 export function Title(props: PropsWithChildren<"title">) {
-  return <gungnir-title {...props}/>;
+  return <gungnir-title url={props.url}>{props.children}</gungnir-title>;
 }
 
 // misc
